@@ -1,0 +1,147 @@
+/**
+ * JavaCC template file created by SF JavaCC plugin 1.5.17+ wizard for JavaCC 1.5.0+
+ */options{  JDK_VERSION = "1.5";  static = false;}PARSER_BEGIN(SwarmerParser)package parser;
+import java.io.*;
+import java.util.AbstractMap; 
+import java.util.HashMap; 
+import java.util.Map; 
+import java.util.ArrayList;
+import com.evo.componentagent.*; 
+import com.evo.componentagent.util.SwarmerEntity; 
+import com.evo.componentagent.util.SwarmerApplication; 
+import com.evo.componentagent.util.NeighbourhoodData; 
+import com.evo.componentagent.components.*; 
+public class SwarmerParser{  public static void main(String args[])   {
+      try      {
+        new SwarmerParser(new FileInputStream(args[0])).CompilationUnit();
+        System.out.println("SUCCESS");       }      catch (ParseException e)      {        System.out.println("Exception:" + e.getMessage());      }      catch (FileNotFoundException e)      {        System.out.println(e.getMessage());
+      }  }}PARSER_END(SwarmerParser)
+
+
+void CompilationUnit() :
+{ }
+{
+  Program() < EOF >}
+
+void Program() :
+{
+  ArrayList<NeighbourhoodData> locales = null;
+  ArrayList<SwarmerEntity > entities = new ArrayList<SwarmerEntity>();
+  ArrayList<BehaviourOptions > behaviours = new ArrayList<BehaviourOptions >();
+  BehaviourOptions behaviour; 
+  SwarmerEntity entity;
+  SwarmerApplication application = new SwarmerApplication(); 
+    }
+{
+  (locales = Views())*  (entity = Entity()  {
+    entities.add(entity);   })*
+  (behaviour = Behaviour() { behaviours.add(behaviour); })*
+  {
+    application.setBehaviours(behaviours);
+    application.setEntities(entities);
+    application.setLocales(locales);
+    application.run(); 
+  }}
+
+java.util.ArrayList<NeighbourhoodData > Views() :
+{
+  java.util.ArrayList<NeighbourhoodData > views = new java.util.ArrayList<NeighbourhoodData>();
+  NeighbourhoodData data;
+}
+{
+  "views" "{" ( data =  View() { views.add(data); })+ "}"
+  {
+    return views;   }}
+
+NeighbourhoodData View() :{
+  NeighbourhoodData data = new NeighbourhoodData(); 
+  String key;
+  Integer number;
+  Token tKey;
+  Token tNumber;
+  Token tEntity; 
+}{
+ tKey =  < IDENTIFIER > { data.setName(tKey.image); } ":" "{"
+  "size" ":" tNumber = < NUMBER > ";" { data.setSize(Integer.parseInt(tNumber.image)); }
+  "entities" ":" tEntity = < IDENTIFIER > { data.addEligibleEntity(tEntity.image);  }
+  ("," tEntity = < IDENTIFIER >{ data.addEligibleEntity(tEntity.image);  })* ";"
+  "}"
+ {
+   return data;
+ }}
+
+SwarmerEntity Entity() : {
+  SwarmerEntity entity = new SwarmerEntity();
+  Token tName;
+  Token tBehaviour, tWeight; 
+  java.util.Map.Entry<String,String > attribute; 
+}{
+  "entity" tName = < IDENTIFIER > { entity.setName(tName.image); } "{"
+  ("attributes" "{" (attribute = Attribute() { entity.addAttribute(attribute); } )* "}")*  ("behaviours" "{" ( tBehaviour = < IDENTIFIER > ":"
+ (    tWeight = < NUMBER > 
+  | tWeight = < DECIMAL > 
+ ) ";"
+   { entity.addBehaviour(tBehaviour.image, Double.parseDouble(tWeight.image)); } )*  "}")*
+  "}"
+  {
+    return entity;   }}
+
+
+java.util.Map.Entry<String,String> Attribute() :
+{
+  Token tKey;
+  Token tValue; 
+}{
+  tKey =< IDENTIFIER > ":" tValue=< VALUE > ";"
+  {
+    return new java.util.AbstractMap.SimpleEntry<String,String >(tKey.image,tValue.image);   }}
+
+BehaviourOptions Behaviour() :
+{
+  BehaviourOptions options = new BehaviourOptions();
+  BehaviourOperation operation;
+  BehaviourAttribute attribute;
+  Token tName; 
+  Token tView;
+
+}{
+  "behaviour" tName = < IDENTIFIER > { options.setName(tName.image);  } "{"
+  "view" ":" tView = < IDENTIFIER > { options.setLocale(tView.image); } ";"  (
+  "operation" ":" operation = BehaviourOperation() ";" { options.setOperation(operation);  }
+| "attribute" ":" attribute = BehaviourAttribute() ";" { options.setAttribute(attribute);  }
+| "panic" ":" ("true" { options.setPanic(true);  } | "false"  { options.setPanic(false); }) ";" 
+  )*
+  "}"
+  {
+    return options;   }
+}
+
+
+BehaviourOperation BehaviourOperation() :{    }{
+ "closest"
+{
+   return BehaviourOperation.Closest;
+}
+| "average"{
+  return BehaviourOperation.AverageFor;}
+| "wander"{  return BehaviourOperation.Wander;
+}
+| "force"{  return BehaviourOperation.Force;
+}
+}
+
+BehaviourAttribute BehaviourAttribute() :{ }
+{
+  "position"  {
+    return BehaviourAttribute.Position;   }
+| "vector"  {
+    return BehaviourAttribute.Vector; 
+  }
+}
+SKIP :{  " "| "\r"| "\t"| "\n"
+| < "//" (~["\n"])* >}TOKEN : /* OPERATORS */{
+  <  DECIMAL : (("-")?(["0"-"9"])*"."(["0"-"9"])*)+ >
+| <  NUMBER : (("-")?["0"-"9"])+ >
+| <  IDENTIFIER : ["a"-"z","A"-"Z"](["a"-"z","A"-"Z","0"-"9","_"])* >
+| < VALUE : ("\""(~["\""])*"\"") >
+}
