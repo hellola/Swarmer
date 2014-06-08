@@ -19,7 +19,7 @@ public class AgentFactory {
 	public static Entity createAgent(World world, String group,boolean debug) {
 		Entity agent = world.createEntity();
 		agent.addComponent(new Position(r.nextInt(800), r.nextInt(600)));
-		agent.addComponent(new SpatialForm("Agent","Basic", Color.white));
+		agent.addComponent(new SpatialForm("Agent","Basic", Color.white,10));
 		ArrayList<NeighbourhoodData> neighbourhoodLocales = new ArrayList<NeighbourhoodData>();
 		NeighbourhoodData locale = new NeighbourhoodData(); 
 		locale.setName("View");

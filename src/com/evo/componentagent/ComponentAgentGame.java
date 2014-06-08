@@ -6,6 +6,8 @@ import java.util.Random;
 
 import org.newdawn.slick.*;
 
+import spactials.Spatial;
+
 import com.artemis.*;
 import com.artemis.managers.GroupManager;
 import com.evo.componentagent.components.Behaviours;
@@ -37,7 +39,7 @@ public class ComponentAgentGame extends BasicGame {
 
 	public ComponentAgentGame() {
 		super("Agents");
-		agentCount = 7;
+		agentCount = 3;
 		timeController = 10; 
 		debug = true;
 		currentDebugIndex = 0;
@@ -72,14 +74,14 @@ public class ComponentAgentGame extends BasicGame {
 			container.setAlwaysRender(true);
 			container.start();
 		} catch (SlickException e) {
-			e.printStackTrace();
+			e.printStackTrace();	
 		}
 	}
 
 	@Override
 	public void render(GameContainer container, Graphics graphics)
 			throws SlickException {
-		graphics.setBackground(Color.white);
+		graphics.setBackground(Color.black);
 		renderSystem.process();
 	}
 
@@ -172,9 +174,13 @@ public class ComponentAgentGame extends BasicGame {
 					int colorInt = Integer.parseInt(tempAttr, 16);
 					color = new Color(colorInt);
 				}
+				
+				double entitySize = Spatial.DefaultSize;
+				if (tempAttr != null) {  
+					entitySize = Double.parseDouble(tempAttr); 
+				}
 
-				worldEntity.addComponent(new SpatialForm("Agent", entity
-						.getName(), color));
+				worldEntity.addComponent(new SpatialForm("Agent", entity.getName(), color,entitySize));
 				Behaviours behaviours = new Behaviours();
 				for (Entry<String, Double> behaviour : entity.getBehaviours()
 						.entrySet()) {
@@ -227,10 +233,7 @@ public class ComponentAgentGame extends BasicGame {
 	}
 
 	private void addAgents() {
-		for (int i = 0; i < agentCount; i++) {
-			world.addEntity(AgentFactory.createAgent(world, "Agent",
-					i == currentDebugIndex));
-		}
+		BlobFactory.createSimulation(world); 
 	}
 
 	@Override

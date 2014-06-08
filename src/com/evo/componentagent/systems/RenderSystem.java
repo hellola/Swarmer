@@ -3,6 +3,7 @@ package com.evo.componentagent.systems;
 import org.newdawn.slick.*;
 
 import spactials.Agent;
+import spactials.Blob;
 import spactials.Spatial;
 
 import com.artemis.Aspect;
@@ -10,10 +11,8 @@ import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.artemis.systems.EntityProcessingSystem;
 import com.artemis.utils.Bag;
-import com.evo.componentagent.components.Debug;
 import com.evo.componentagent.components.Position;
 import com.evo.componentagent.components.SpatialForm;
-import com.evo.componentagent.components.Velocity;
 
 public class RenderSystem extends EntityProcessingSystem {
 
@@ -25,7 +24,7 @@ public class RenderSystem extends EntityProcessingSystem {
 	private ComponentMapper<SpatialForm> spatialFormMapper; 
 
 	public RenderSystem(GameContainer container) {
-		super(Aspect.getAspectForAll(Position.class,Velocity.class,SpatialForm.class));
+		super(Aspect.getAspectForAll(Position.class,SpatialForm.class));
 		this.container = container; 
 		this.graphics = container.getGraphics(); 
 		spatials = new Bag<Spatial>(); 
@@ -88,6 +87,9 @@ public class RenderSystem extends EntityProcessingSystem {
         
         if("Agent".equalsIgnoreCase(spatialFormFile)){
             return new Agent(spatialForm.getName(), world, entity, spatialForm.getColor());
+        }
+        if ("Blob".equalsIgnoreCase(spatialFormFile)) { 
+        	return new Blob(spatialForm.getName(), world, entity,spatialForm.getColor(),spatialForm.getSize()); 
         }
         // create other spatials down here
         return null;

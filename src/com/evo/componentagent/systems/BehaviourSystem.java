@@ -28,6 +28,7 @@ public class BehaviourSystem extends EntityProcessingSystem {
 	private ComponentMapper<Behaviours> behaviourMapper;
 	private ComponentMapper<Velocity> velocityMapper;
 	private ComponentMapper<Debug> debugMapper;
+	private ComponentMapper<FacadePosition> facadeMapper;
 	private ComponentMapper<Neighbourhood> neighbourhoodMapper;
 	private GroupManager groupManager;
 	private Random random;
@@ -40,7 +41,7 @@ public class BehaviourSystem extends EntityProcessingSystem {
 		super(Aspect.getAspectForAll(Position.class, Neighbourhood.class,
 				Behaviours.class, Velocity.class));
 		this.container = container;
-		random = new Random(); 
+		random = new Random();
 	}
 
 	@Override
@@ -49,6 +50,7 @@ public class BehaviourSystem extends EntityProcessingSystem {
 		behaviourMapper = ComponentMapper.getFor(Behaviours.class, world);
 		velocityMapper = ComponentMapper.getFor(Velocity.class, world);
 		debugMapper = ComponentMapper.getFor(Debug.class, world);
+		facadeMapper = ComponentMapper.getFor(FacadePosition.class, world);
 		neighbourhoodMapper = ComponentMapper
 				.getFor(Neighbourhood.class, world);
 		groupManager = world.getManager(GroupManager.class);
@@ -58,7 +60,8 @@ public class BehaviourSystem extends EntityProcessingSystem {
 	@Override
 	protected void process(Entity entity) {
 		Behaviours behaviours = behaviourMapper.get(entity);
-		ArrayList<BehaviourOptions> behaviourOptionSet = behaviours.getBehaviours();
+		ArrayList<BehaviourOptions> behaviourOptionSet = behaviours
+				.getBehaviours();
 
 		entityPosition = positionMapper.get(entity);
 		currentVelocity = velocityMapper.get(entity);
@@ -87,24 +90,48 @@ public class BehaviourSystem extends EntityProcessingSystem {
 			if (debugMapper.has(entity)) {
 				Debug debug = debugMapper.get(entity);
 				debug.wanderDebugCircle = new Circle(entityPosition.getX()
-						+ circleCenter.x, entityPosition.getY() + circleCenter.y,
-						circleRadius);
+						+ circleCenter.x, entityPosition.getY()
+						+ circleCenter.y, circleRadius);
 				debug.wanderVector = displacement;
 			}
 			Vector2f wanderForce = circleCenter.add(displacement);
 			wanderForce.normalise();
-			wanderForce.scale((float) ((float) options.getWeight() * currentVelocity.getMaxForce()));
-			currentVelocity.steer(wanderForce,options.isPanic());
+			wanderForce
+					.scale((float) ((float) options.getWeight() * currentVelocity
+							.getMaxForce()));
+			currentVelocity.steer(wanderForce, options.isPanic());
 			break;
+		case Entity:
+			Entity targetEntity = world.getEntity(options.getEntityId());
+			if (positionMapper.has(targetEntity)) {
+				Position masterPosition = positionMapper.get(targetEntity);
+				Vector2f entityForce = entityPosition.getOffset(masterPosition);
+				if (facadeMapper.has(targetEntity)) {
+					FacadePosition facade = facadeMapper.get(targetEntity);
+					for (Position position : facade.getPositions()) {
+						Vector2f facadeVector = entityPosition
+								.getOffset(position);
+						if (entityForce.length() > facadeVector.length()) {
+							entityForce = facadeVector;
+						}
+					}
+				}
+				entityForce.normalise();
+				entityForce
+						.scale((float) ((float) options.getWeight() * currentVelocity
+								.getMaxForce()));
+				currentVelocity.steer(entityForce);
+			}
+
 		case AverageFor:
-			HashMap<Entity,Position> locale = neighbourhood
+			HashMap<Entity, Position> locale = neighbourhood
 					.getLocaleMembers(options.getLocale());
 			Vector2f result = null;
 
 			AverageStrategy strategy = null;
 			switch (options.getAttribute()) {
 			case Vector:
-				strategy = new VectorAverageStrategy(locale,world);
+				strategy = new VectorAverageStrategy(locale, world);
 				break;
 			case Position:
 				strategy = new PositionAverageStrategy(entityPosition, world,
@@ -114,24 +141,27 @@ public class BehaviourSystem extends EntityProcessingSystem {
 			result = strategy.CalculateAverage();
 
 			if (result != null) {
-				result = result.normalise(); 
-				result = result.scale((float) ((float)options.getWeight() * currentVelocity.getMaxForce()));
+				result = result.normalise();
+				result = result
+						.scale((float) ((float) options.getWeight() * currentVelocity
+								.getMaxForce()));
 				if (debugMapper.has(entity)) {
 					Debug debug = debugMapper.get(entity);
 					((Line) debug.averageVelocityDebugShape).set(
 							entityPosition.getX(), entityPosition.getY(),
-							entityPosition.getX() + (result.getX() ),
+							entityPosition.getX() + (result.getX()),
 							entityPosition.getY() + (result.getY()));
 				}
-				currentVelocity.steer(result,options.isPanic());
+				currentVelocity.steer(result, options.isPanic());
 			}
 			break;
 		case Closest:
 			Vector2f minOffset = new Vector2f(100000, 100000);
 			boolean changed = false;
-			for (Entry<Entity,Position> currentEntry : neighbourhood.getLocaleMembers(options.getLocale()).entrySet()) {
+			for (Entry<Entity, Position> currentEntry : neighbourhood
+					.getLocaleMembers(options.getLocale()).entrySet()) {
 				if (currentEntry.getKey() != entity) {
-					Position currentPosition = currentEntry.getValue(); 
+					Position currentPosition = currentEntry.getValue();
 					Vector2f offset = entityPosition.getOffset(currentPosition);
 					if (offset.length() < minOffset.length()) {
 						changed = true;
@@ -142,9 +172,10 @@ public class BehaviourSystem extends EntityProcessingSystem {
 			// apply the force to the found minimum
 			if (changed) {
 				minOffset = minOffset.normalise();
-				minOffset.scale((float) ((float) options.getWeight()
-						* currentVelocity.getMaxForce()));
-				currentVelocity.steer(minOffset,options.isPanic());
+				minOffset
+						.scale((float) ((float) options.getWeight() * currentVelocity
+								.getMaxForce()));
+				currentVelocity.steer(minOffset, options.isPanic());
 				if (debugMapper.has(entity)) {
 					Debug debug = debugMapper.get(entity);
 					debug.debugVector = minOffset;

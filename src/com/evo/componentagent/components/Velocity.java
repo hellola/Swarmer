@@ -43,6 +43,9 @@ public class Velocity extends Component implements Summable {
 	public static final Double DefaultPanicVelocity  = (double) 3;
 	
 	
+	public void steer(Vector2f desiredVector) { 
+		steer(desiredVector,false); 
+	}
 	public void steer(Vector2f desiredVector, boolean isPanic) {
 		Vector2f steering = desiredVector.sub(vector);  
 		truncate(steering, maxForce); 

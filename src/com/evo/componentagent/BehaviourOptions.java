@@ -11,6 +11,7 @@ public class BehaviourOptions {
 	private double weight; 
 	private String group;
 	private boolean panic; 
+	private int entityId; 
 
 	public  BehaviourOptions() { 
 	}
@@ -35,6 +36,13 @@ public class BehaviourOptions {
 
 	public static BehaviourOptions BaseBehaviourOptions(BehaviourOperation operation, String locale, double force, String group) {
 		return CreateBehaviourOptions(BehaviourAttribute.Position, operation, locale, force, group); 
+	}
+
+	public static BehaviourOptions EntityBehaviourOptions(int entityId, double force, String group) {
+
+		BehaviourOptions options = CreateBehaviourOptions(BehaviourAttribute.Position, BehaviourOperation.Entity, "", force, group); 
+		options.setEntityId(entityId); 
+		return options; 
 	}
 	
 	public static BehaviourOptions CreateBehaviourOptions(BehaviourAttribute attribute, BehaviourOperation operation, String locale, double force, String group) {
@@ -103,6 +111,14 @@ public class BehaviourOptions {
 
 	public void setPanic(boolean panic) {
 		this.panic = panic;
+	}
+
+	public int getEntityId() {
+		return entityId;
+	}
+
+	public void setEntityId(int entityId) {
+		this.entityId = entityId;
 	}
 
 }

@@ -21,33 +21,42 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.geom.Transform;
+import org.newdawn.slick.util.ResourceLoader;
 
-public class Agent extends Spatial {
+public class Blob extends Spatial {
 
 	private Position position;
 	private Velocity velocity;
-	private Polygon ship;
-	private Font font;
+	private Circle blob;
 	private ComponentMapper<Debug> debugMapper;
 	private ComponentMapper<Position> positionMapper;
 	private ComponentMapper<Velocity> velocityMapper;
 	private ComponentMapper<Behaviours> behaviourMapper;
 	private ComponentMapper<Neighbourhood> neighbourhoodMapper;
 	private Color color;
-	private String name; 
+	private String name;
+	private double size;
 
-	public Agent(String name, World world, Entity owner, Color color) {
+	
+	public static Font defaultFont ;
+	public Blob(String name, World world, Entity owner, Color color, double size) {
 		super(world, owner);
-		this.name = name; 
+		this.name = name;
 		this.color = color;
+		this.size = size;
 		try {
-			String fontResource = this.getClass().getResource("/resources/defaultfont.fnt").getFile();
-			String fontImage = this.getClass().getResource("/resources/defaultfont.png").getFile();
-			font = new AngelCodeFont(fontResource,
-					fontImage);
+			if (defaultFont == null) { 
+			String fontResource = this.getClass()
+					.getResource("/resources/defaultfont.fnt").getFile();
+			String fontImage = this.getClass()
+					.getResource("/resources/defaultfont.png").getFile();
+			defaultFont = new AngelCodeFont(fontResource, fontImage);
+				
+			}
 			debugMapper = ComponentMapper.getFor(Debug.class, owner.getWorld());
 		} catch (SlickException e) {
 			e.printStackTrace();
@@ -61,49 +70,38 @@ public class Agent extends Spatial {
 		behaviourMapper = ComponentMapper.getFor(Behaviours.class, world);
 		neighbourhoodMapper = ComponentMapper
 				.getFor(Neighbourhood.class, world);
+		blob = new Circle((float) 30, (float) 30, (float) size);
 
-		int agentSize = 10;
-		ship = new Polygon();
-		ship.addPoint(-agentSize, -agentSize);
-		ship.addPoint(0, agentSize * 2);
-		ship.addPoint(agentSize, -agentSize);
-		ship.setClosed(true);
+		size = 10;
 	}
 
 	@Override
 	public void render(Graphics g) {
 		position = positionMapper.get(owner);
 		velocity = velocityMapper.get(owner);
-		Neighbourhood neighbourHood = neighbourhoodMapper.get(owner);
 		if (debugMapper.has(owner)) {
 			g.setColor(Color.green);
 		} else {
 			g.setColor(color);
 		}
 		g.setAntiAlias(true);
-		Vector2f velocityVector = velocity.getVelocity();
-		ship.setLocation(position.getX(), position.getY());
-		float angle = (float) Math.toRadians(velocityVector.getTheta() - 90);
-		Polygon rotated = (Polygon) ship
-				.transform(Transform.createRotateTransform(angle,
-						position.getX(), position.getY()));
-		g.fill(rotated);
-		g.setColor(Color.orange);
-		Line direction = new Line(position.getX(), position.getY(),
-				position.getX() + (velocityVector.x * 50), position.getY()
-						+ (velocityVector.y * 50));
-		g.draw(direction);
+		blob.setCenterX(position.getX());
+		blob.setCenterY(position.getY());
+		g.fill(blob);
 
 		if (debugMapper.has(owner)) {
 			String localeText = "";
-			for (NeighbourhoodData locale : neighbourHood.getLocales()) {
-				localeText += locale.getName()
-						+ ":"
-						+ ((Integer) neighbourHood.getLocaleMembers(
-								locale.getName()).size()).toString() + "\n";
+			if (neighbourhoodMapper.has(owner)) {
+				Neighbourhood neighbourHood = neighbourhoodMapper.get(owner);
+				for (NeighbourhoodData locale : neighbourHood.getLocales()) {
+					localeText += locale.getName()
+							+ ":"
+							+ ((Integer) neighbourHood.getLocaleMembers(
+									locale.getName()).size()).toString() + "\n";
+				}
 			}
 			String id = ((Integer) owner.getId()).toString();
-			font.drawString(position.getX() + 20, position.getY() + 20, name
+			defaultFont.drawString(position.getX() + 20, position.getY() + 20, name
 					+ " " + id + " " + localeText);
 			g.setColor(Color.red);
 			Debug debug = debugMapper.get(owner);
