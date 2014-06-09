@@ -34,13 +34,13 @@ public class ComponentAgentGame extends BasicGame {
 	private static final int DefaultNumberEntities = 10;
 	private SwarmerApplication application;
 	private Random random;
-	private float timeController; 
+	private float timeController;
 	private Boolean debug;
 
 	public ComponentAgentGame() {
 		super("Agents");
 		agentCount = 3;
-		timeController = 10; 
+		timeController = 10;
 		debug = true;
 		currentDebugIndex = 0;
 		application = null;
@@ -74,7 +74,7 @@ public class ComponentAgentGame extends BasicGame {
 			container.setAlwaysRender(true);
 			container.start();
 		} catch (SlickException e) {
-			e.printStackTrace();	
+			e.printStackTrace();
 		}
 	}
 
@@ -112,11 +112,11 @@ public class ComponentAgentGame extends BasicGame {
 		if (c == 'c') {
 			world.addEntity(AgentFactory.createAgent(world, "Agent", false));
 		}
-		if (c == '+') { 
-			timeController-= 0.5; 
+		if (c == '+') {
+			timeController -= 0.5;
 		}
-		if (c == '-') { 
-			timeController += 0.5; 
+		if (c == '-') {
+			timeController += 0.5;
 		}
 	}
 
@@ -145,6 +145,7 @@ public class ComponentAgentGame extends BasicGame {
 	}
 
 	private void setUpFromSwarmerApplication() {
+		agentCount = 0;
 		GroupManager manager = world.getManager(GroupManager.class);
 
 		boolean debugCreated = false;
@@ -155,7 +156,23 @@ public class ComponentAgentGame extends BasicGame {
 				numEntities = Integer.parseInt(tempAttr);
 			}
 
+			Behaviours behaviours = new Behaviours();
+			for (Entry<String, Double> behaviour : entity.getBehaviours()
+					.entrySet()) {
+				BehaviourOptions options = new BehaviourOptions(
+						application.getBehaviourByName(behaviour.getKey()));
+				options.setWeight(behaviour.getValue());
+				options.setGroup(entity.getName());
+				behaviours.AddBehaviourOption(options);
+			}
+
 			for (int i = 0; i < numEntities; i++) {
+
+				ArrayList<String> usedNeighbourhoods = behaviours
+						.getUsedNeighbourhoods();
+				Neighbourhood neighbourhood = new Neighbourhood(
+						application.getLocales(usedNeighbourhoods));
+
 				Entity worldEntity = world.createEntity();
 				if (i == currentDebugIndex && !debugCreated) {
 					worldEntity.addComponent(new Debug());
@@ -167,33 +184,25 @@ public class ComponentAgentGame extends BasicGame {
 				tempAttr = entity.getAttribute("color");
 				if (tempAttr != null) {
 					tempAttr = tempAttr.replace("#", "");
-					/*
-					 * if (tempAttr.length() == 6) { tempAttr = "FF" + tempAttr;
-					 * }
-					 */
 					int colorInt = Integer.parseInt(tempAttr, 16);
 					color = new Color(colorInt);
 				}
-				
+
 				double entitySize = Spatial.DefaultSize;
-				if (tempAttr != null) {  
-					entitySize = Double.parseDouble(tempAttr); 
+				tempAttr = entity.getAttribute("entity_size");
+				if (tempAttr != null) {
+					entitySize = Double.parseDouble(tempAttr);
 				}
 
-				worldEntity.addComponent(new SpatialForm("Agent", entity.getName(), color,entitySize));
-				Behaviours behaviours = new Behaviours();
-				for (Entry<String, Double> behaviour : entity.getBehaviours()
-						.entrySet()) {
-					BehaviourOptions options = new BehaviourOptions(
-							application.getBehaviourByName(behaviour.getKey()));
-					options.setWeight(behaviour.getValue());
-					options.setGroup(entity.getName());
-					behaviours.AddBehaviourOption(options);
+				String form = Spatial.DefaultForm;
+				tempAttr = entity.getAttribute("shape");
+				if (tempAttr != null) {
+					form = tempAttr;
 				}
-				ArrayList<String> usedNeighbourhoods = behaviours
-						.getUsedNeighbourhoods();
-				Neighbourhood neighbourhood = new Neighbourhood(
-						application.getLocales(usedNeighbourhoods));
+
+				worldEntity.addComponent(new SpatialForm(form,
+						entity.getName(), color, entitySize));
+
 				worldEntity.addComponent(neighbourhood);
 
 				worldEntity.addComponent(behaviours);
@@ -221,11 +230,14 @@ public class ComponentAgentGame extends BasicGame {
 					panicVelocity = Double.parseDouble(tempAttr);
 				}
 
-				worldEntity.addComponent(Velocity.RandomVelocity(mass,
-						maxVelocity, maxForce, panicVelocity));
+				if (behaviours.getBehaviours().size() > 0) {
+					worldEntity.addComponent(Velocity.RandomVelocity(mass,
+							maxVelocity, maxForce, panicVelocity));
+				}
 				manager.add(worldEntity, entity.getName());
 
 				world.addEntity(worldEntity);
+				agentCount++;
 			}
 
 		}
@@ -233,7 +245,7 @@ public class ComponentAgentGame extends BasicGame {
 	}
 
 	private void addAgents() {
-		BlobFactory.createSimulation(world); 
+		BlobFactory.createSimulation(world);
 	}
 
 	@Override

@@ -24,6 +24,7 @@ public class BehaviourOptions {
 		this.group = options.getGroup(); 
 		this.operation = options.getOperation(); 
 		this.attribute = options.getAttribute(); 
+		this.panic = options.isPanic(); 
 	}
 	
 	public static BehaviourOptions VectorBehaviourOptions(BehaviourOperation operation, String locale, double force, String group) {
