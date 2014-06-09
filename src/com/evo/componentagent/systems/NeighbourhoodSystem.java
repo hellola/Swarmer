@@ -4,6 +4,10 @@ import java.util.ArrayList;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.geom.Circle;
+import org.newdawn.slick.geom.Shape;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Transform;
+import org.newdawn.slick.geom.Vector2f;
 
 import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
@@ -19,10 +23,16 @@ public class NeighbourhoodSystem extends EntityProcessingSystem {
 	private ComponentMapper<Position> positionMapper;
 	private ComponentMapper<FacadePosition> facadeMapper;
 	private ComponentMapper<Neighbourhood> neighbourhoodMapper;
+	private ComponentMapper<Debug> debugMapper;
+	private ComponentMapper<Velocity> velocityMapper;
 	private GameContainer container;
 	private GroupManager groupManager;
 	private Position entityPosition;
 	private Neighbourhood neighbourhood;
+	private NeighbourhoodData currentNeighbourhoodData;
+	private Shape viewShape;
+	private Vector2f currentVelocity;
+	private Entity processingEntity;
 
 	public NeighbourhoodSystem(GameContainer container) {
 		super(Aspect.getAspectForAll(Position.class, Neighbourhood.class));
@@ -35,16 +45,28 @@ public class NeighbourhoodSystem extends EntityProcessingSystem {
 		neighbourhoodMapper = ComponentMapper
 				.getFor(Neighbourhood.class, world);
 		facadeMapper = ComponentMapper.getFor(FacadePosition.class, world);
+		debugMapper = ComponentMapper.getFor(Debug.class, world);
+		velocityMapper = ComponentMapper.getFor(Velocity.class, world);
 		groupManager = world.getManager(GroupManager.class);
+		currentVelocity = null;
 	}
 
 	@Override
 	protected void process(Entity entity) {
+		processingEntity = entity;
 		entityPosition = positionMapper.get(entity);
+		if (velocityMapper.has(entity)) {
+			currentVelocity = velocityMapper.get(entity).getValue();
+		} else {
+			currentVelocity = null;
+		}
 		neighbourhood = neighbourhoodMapper.get(entity);
 		neighbourhood.reset();
 
 		for (NeighbourhoodData locale : neighbourhood.getLocales()) {
+			viewShape = locale.getShape();
+			currentNeighbourhoodData = locale; 
+			setUpShape();
 			for (String entityGroup : locale.getEligibleEntities()) {
 				ImmutableBag<Entity> entities = groupManager
 						.getEntities(entityGroup);
@@ -64,16 +86,15 @@ public class NeighbourhoodSystem extends EntityProcessingSystem {
 	}
 
 	private void searchEntity(String locale, Entity currentEntity) {
-		double distance = neighbourhood.getViewSize(locale);
 		Position point = positionMapper.get(currentEntity);
 
-		if (inNeighbourhood(distance, point)) {
+		if (inNeighbourhood(point)) {
 			neighbourhood.add(locale, currentEntity, point);
 		} else {
 			if (facadeMapper.has(currentEntity)) {
 				FacadePosition facade = facadeMapper.get(currentEntity);
 				for (Position facadePosition : facade.getPositions()) {
-					if (inNeighbourhood(distance, facadePosition)) {
+					if (inNeighbourhood(facadePosition)) {
 						neighbourhood
 								.add(locale, currentEntity, facadePosition);
 						break;
@@ -84,19 +105,42 @@ public class NeighbourhoodSystem extends EntityProcessingSystem {
 
 	}
 
-	protected boolean inNeighbourhood(double distance, Position point) {
-		int radius = (int) distance / 2;
-		if (pointInCircle(entityPosition, point, radius)) {
+	protected boolean inNeighbourhood(Position point) {
+		if (pointInShape(point)) {
 			return true;
 		}
 		return false;
 	}
 
-	protected boolean pointInCircle(Position c, Position p, int radius) {
-		Circle circle = new Circle(c.getX(), c.getY(), (float) radius);
-		return circle.contains(p.getX(), p.getY());
-		// return Math.pow(p.getX() - c.getX(), 2)
-		// + Math.pow(p.getY() - c.getY(), 2) < Math.pow(radius, 2);
+	protected boolean pointInShape(Position p) {
+		return viewShape.contains(p.getX(), p.getY());
+	}
+
+	protected void setUpShape() {
+		Vector2f transformPosition = currentNeighbourhoodData.getTransformPosition(); 
+		if (viewShape instanceof Circle) {
+			viewShape.setCenterX(entityPosition.getX() + transformPosition.getX());
+			viewShape.setCenterY(entityPosition.getY() + transformPosition.getY());
+		} else {
+			viewShape.setX(entityPosition.getX() + transformPosition.getX());
+			viewShape.setY(entityPosition.getY() + transformPosition.getY());
+
+			if (currentVelocity != null) {
+				float angle = (float) Math
+						.toRadians(currentVelocity.getTheta() - 90);
+				Shape rotated = viewShape.transform(Transform
+						.createRotateTransform(angle, entityPosition.getX(),
+								entityPosition.getY()));
+				viewShape = rotated;
+			}
+
+		}
+		if (debugMapper.has(processingEntity)) {
+			Shape shape = viewShape.transform(Transform.createRotateTransform(0)); 
+			debugMapper.get(processingEntity).neighbourhoodShapes
+					.add(shape);
+		}
+
 	}
 
 }

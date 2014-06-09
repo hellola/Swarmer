@@ -17,6 +17,7 @@ public class Debug extends Component {
 	public Vector2f wanderVector; 
 	public Vector2f debugVector; 
 	public boolean drawDebugVector; 
+	public ArrayList<Shape> neighbourhoodShapes; 
 	
 	public Debug() {
 		averagePositionDebugShape = new Circle(-40f,-40f, 10); 
@@ -26,6 +27,7 @@ public class Debug extends Component {
 		wanderVector = new Vector2f(); 
 		debugVector = new Vector2f(); 
 		drawDebugVector = false; 
+		neighbourhoodShapes = new ArrayList<Shape>(); 
 	}
 	
 
