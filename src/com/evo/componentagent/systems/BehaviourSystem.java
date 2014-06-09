@@ -155,9 +155,69 @@ public class BehaviourSystem extends EntityProcessingSystem {
 				currentVelocity.steer(result, options.isPanic());
 			}
 			break;
-		case Closest:
+		case Field:
 			Vector2f minOffset = new Vector2f(100000, 100000);
 			boolean changed = false;
+			for (Entry<Entity, Position> currentEntry : neighbourhood
+					.getLocaleMembers(options.getLocale()).entrySet()) {
+				if (currentEntry.getKey() != entity) {
+					Position currentPosition = currentEntry.getValue();
+					Vector2f offset = entityPosition.getOffset(currentPosition);
+					if (offset.length() < minOffset.length()) {
+						changed = true;
+						minOffset = offset;
+					}
+				}
+			}
+			if (changed) {
+				minOffset = minOffset.normalise();
+				int max = neighbourhood.getViewSize(options.getLocale()); 
+				double proportion =  1- ( minOffset.length() / max);  
+
+				minOffset.scale((float) ((float) (options.getWeight() * proportion) * currentVelocity
+								.getMaxForce()));
+				currentVelocity.steer(minOffset, options.isPanic());
+				if (debugMapper.has(entity)) {
+					Debug debug = debugMapper.get(entity);
+					debug.debugVector = minOffset;
+					debug.drawDebugVector = true;
+				}
+			}
+
+			break;
+		case Flank:
+			minOffset = new Vector2f(100000, 100000);
+			changed = false;
+			for (Entry<Entity, Position> currentEntry : neighbourhood
+					.getLocaleMembers(options.getLocale()).entrySet()) {
+				if (currentEntry.getKey() != entity) {
+					Position currentPosition = currentEntry.getValue();
+					Vector2f offset = entityPosition.getOffset(currentPosition);
+					if (offset.length() < minOffset.length()) {
+						changed = true;
+						minOffset = offset;
+					}
+				}
+			}
+			// apply the force to the found minimum
+			if (changed) {
+				minOffset = minOffset.normalise();
+				minOffset
+						.scale((float) ((float) options.getWeight() * currentVelocity
+								.getMaxForce()));
+				minOffset = minOffset.getPerpendicular(); 
+				currentVelocity.steer(minOffset, options.isPanic());
+				if (debugMapper.has(entity)) {
+					Debug debug = debugMapper.get(entity);
+					debug.debugVector = minOffset;
+					debug.drawDebugVector = true;
+				}
+			}
+
+			break;
+		case Closest:
+			minOffset = new Vector2f(100000, 100000);
+			changed = false;
 			for (Entry<Entity, Position> currentEntry : neighbourhood
 					.getLocaleMembers(options.getLocale()).entrySet()) {
 				if (currentEntry.getKey() != entity) {
