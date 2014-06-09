@@ -55,7 +55,7 @@ public class SwarmerParser implements SwarmerParserConstants {
     label_2:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 9:
+      case 10:
         ;
         break;
       default:
@@ -68,7 +68,7 @@ public class SwarmerParser implements SwarmerParserConstants {
     label_3:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 12:
+      case 13:
         ;
         break;
       default:
@@ -114,6 +114,7 @@ public class SwarmerParser implements SwarmerParserConstants {
   Token tKey;
   Token tNumber;
   Token tEntity;
+  Token tShape;
     tKey = jj_consume_token(IDENTIFIER);
                           data.setName(tKey.image);
     jj_consume_token(4);
@@ -122,7 +123,8 @@ public class SwarmerParser implements SwarmerParserConstants {
     jj_consume_token(4);
     tNumber = jj_consume_token(NUMBER);
     jj_consume_token(6);
-                                        data.setSize(Integer.parseInt(tNumber.image));
+    data.setSize(Integer.parseInt(tNumber.image));
+    data.setShapeFromString("circle");
     jj_consume_token(7);
     jj_consume_token(4);
     tEntity = jj_consume_token(IDENTIFIER);
@@ -142,6 +144,22 @@ public class SwarmerParser implements SwarmerParserConstants {
                                  data.addEligibleEntity(tEntity.image);
     }
     jj_consume_token(6);
+    label_6:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case 9:
+        ;
+        break;
+      default:
+        jj_la1[5] = jj_gen;
+        break label_6;
+      }
+      jj_consume_token(9);
+      jj_consume_token(4);
+      tShape = jj_consume_token(IDENTIFIER);
+      jj_consume_token(6);
+                                                data.setShapeFromString(tShape.image);
+    }
     jj_consume_token(3);
    {if (true) return data;}
     throw new Error("Missing return statement in function");
@@ -152,58 +170,58 @@ public class SwarmerParser implements SwarmerParserConstants {
   Token tName;
   Token tBehaviour, tWeight;
   java.util.Map.Entry<String,String > attribute;
-    jj_consume_token(9);
+    jj_consume_token(10);
     tName = jj_consume_token(IDENTIFIER);
                                     entity.setName(tName.image);
     jj_consume_token(2);
-    label_6:
-    while (true) {
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 10:
-        ;
-        break;
-      default:
-        jj_la1[5] = jj_gen;
-        break label_6;
-      }
-      jj_consume_token(10);
-      jj_consume_token(2);
-      label_7:
-      while (true) {
-        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case IDENTIFIER:
-          ;
-          break;
-        default:
-          jj_la1[6] = jj_gen;
-          break label_7;
-        }
-        attribute = Attribute();
-                                               entity.addAttribute(attribute);
-      }
-      jj_consume_token(3);
-    }
-    label_8:
+    label_7:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case 11:
         ;
         break;
       default:
-        jj_la1[7] = jj_gen;
-        break label_8;
+        jj_la1[6] = jj_gen;
+        break label_7;
       }
       jj_consume_token(11);
       jj_consume_token(2);
-      label_9:
+      label_8:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
         case IDENTIFIER:
           ;
           break;
         default:
-          jj_la1[8] = jj_gen;
-          break label_9;
+          jj_la1[7] = jj_gen;
+          break label_8;
+        }
+        attribute = Attribute();
+                                               entity.addAttribute(attribute);
+      }
+      jj_consume_token(3);
+    }
+    label_9:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case 12:
+        ;
+        break;
+      default:
+        jj_la1[8] = jj_gen;
+        break label_9;
+      }
+      jj_consume_token(12);
+      jj_consume_token(2);
+      label_10:
+      while (true) {
+        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        case IDENTIFIER:
+          ;
+          break;
+        default:
+          jj_la1[9] = jj_gen;
+          break label_10;
         }
         tBehaviour = jj_consume_token(IDENTIFIER);
         jj_consume_token(4);
@@ -215,7 +233,7 @@ public class SwarmerParser implements SwarmerParserConstants {
           tWeight = jj_consume_token(DECIMAL);
           break;
         default:
-          jj_la1[9] = jj_gen;
+          jj_la1[10] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
@@ -246,63 +264,63 @@ public class SwarmerParser implements SwarmerParserConstants {
   BehaviourAttribute attribute;
   Token tName;
   Token tView;
-    jj_consume_token(12);
+    jj_consume_token(13);
     tName = jj_consume_token(IDENTIFIER);
                                        options.setName(tName.image);
     jj_consume_token(2);
-    jj_consume_token(13);
+    jj_consume_token(14);
     jj_consume_token(4);
     tView = jj_consume_token(IDENTIFIER);
                                       options.setLocale(tView.image);
     jj_consume_token(6);
-    label_10:
+    label_11:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 14:
       case 15:
       case 16:
+      case 17:
         ;
         break;
       default:
-        jj_la1[10] = jj_gen;
-        break label_10;
+        jj_la1[11] = jj_gen;
+        break label_11;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 14:
-        jj_consume_token(14);
+      case 15:
+        jj_consume_token(15);
         jj_consume_token(4);
         operation = BehaviourOperation();
         jj_consume_token(6);
                                                          options.setOperation(operation);
         break;
-      case 15:
-        jj_consume_token(15);
+      case 16:
+        jj_consume_token(16);
         jj_consume_token(4);
         attribute = BehaviourAttribute();
         jj_consume_token(6);
                                                          options.setAttribute(attribute);
         break;
-      case 16:
-        jj_consume_token(16);
+      case 17:
+        jj_consume_token(17);
         jj_consume_token(4);
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case 17:
-          jj_consume_token(17);
-                        options.setPanic(true);
-          break;
         case 18:
           jj_consume_token(18);
+                        options.setPanic(true);
+          break;
+        case 19:
+          jj_consume_token(19);
                                                                 options.setPanic(false);
           break;
         default:
-          jj_la1[11] = jj_gen;
+          jj_la1[12] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
         jj_consume_token(6);
         break;
       default:
-        jj_la1[12] = jj_gen;
+        jj_la1[13] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -314,24 +332,32 @@ public class SwarmerParser implements SwarmerParserConstants {
 
   final public BehaviourOperation BehaviourOperation() throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case 19:
-      jj_consume_token(19);
-   {if (true) return BehaviourOperation.Closest;}
-      break;
     case 20:
       jj_consume_token(20);
-  {if (true) return BehaviourOperation.AverageFor;}
+        {if (true) return BehaviourOperation.Flank;}
       break;
     case 21:
       jj_consume_token(21);
-  {if (true) return BehaviourOperation.Wander;}
+        {if (true) return BehaviourOperation.Field;}
       break;
     case 22:
       jj_consume_token(22);
+   {if (true) return BehaviourOperation.Closest;}
+      break;
+    case 23:
+      jj_consume_token(23);
+  {if (true) return BehaviourOperation.AverageFor;}
+      break;
+    case 24:
+      jj_consume_token(24);
+  {if (true) return BehaviourOperation.Wander;}
+      break;
+    case 25:
+      jj_consume_token(25);
   {if (true) return BehaviourOperation.Force;}
       break;
     default:
-      jj_la1[13] = jj_gen;
+      jj_la1[14] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -340,16 +366,16 @@ public class SwarmerParser implements SwarmerParserConstants {
 
   final public BehaviourAttribute BehaviourAttribute() throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case 23:
-      jj_consume_token(23);
+    case 26:
+      jj_consume_token(26);
     {if (true) return BehaviourAttribute.Position;}
       break;
-    case 24:
-      jj_consume_token(24);
+    case 27:
+      jj_consume_token(27);
     {if (true) return BehaviourAttribute.Vector;}
       break;
     default:
-      jj_la1[14] = jj_gen;
+      jj_la1[15] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -365,7 +391,7 @@ public class SwarmerParser implements SwarmerParserConstants {
   public Token jj_nt;
   private int jj_ntk;
   private int jj_gen;
-  final private int[] jj_la1 = new int[15];
+  final private int[] jj_la1 = new int[16];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -373,10 +399,10 @@ public class SwarmerParser implements SwarmerParserConstants {
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x2,0x200,0x1000,0x0,0x100,0x400,0x0,0x800,0x0,0xc0000000,0x1c000,0x60000,0x1c000,0x780000,0x1800000,};
+      jj_la1_0 = new int[] {0x2,0x400,0x2000,0x0,0x100,0x200,0x800,0x0,0x1000,0x0,0x0,0x38000,0xc0000,0x38000,0x3f00000,0xc000000,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x0,0x0,0x0,0x1,0x0,0x0,0x1,0x0,0x1,0x0,0x0,0x0,0x0,0x0,0x0,};
+      jj_la1_1 = new int[] {0x0,0x0,0x0,0x8,0x0,0x0,0x0,0x8,0x0,0x8,0x6,0x0,0x0,0x0,0x0,0x0,};
    }
 
   /** Constructor with InputStream. */
@@ -390,7 +416,7 @@ public class SwarmerParser implements SwarmerParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 15; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 16; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -404,7 +430,7 @@ public class SwarmerParser implements SwarmerParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 15; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 16; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -414,7 +440,7 @@ public class SwarmerParser implements SwarmerParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 15; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 16; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -424,7 +450,7 @@ public class SwarmerParser implements SwarmerParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 15; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 16; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -433,7 +459,7 @@ public class SwarmerParser implements SwarmerParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 15; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 16; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -442,7 +468,7 @@ public class SwarmerParser implements SwarmerParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 15; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 16; i++) jj_la1[i] = -1;
   }
 
   private Token jj_consume_token(int kind) throws ParseException {
@@ -493,12 +519,12 @@ public class SwarmerParser implements SwarmerParserConstants {
   /** Generate ParseException. */
   public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[34];
+    boolean[] la1tokens = new boolean[37];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 15; i++) {
+    for (int i = 0; i < 16; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {
@@ -510,7 +536,7 @@ public class SwarmerParser implements SwarmerParserConstants {
         }
       }
     }
-    for (int i = 0; i < 34; i++) {
+    for (int i = 0; i < 37; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;

@@ -59,12 +59,18 @@ NeighbourhoodData View() :{
   Integer number;
   Token tKey;
   Token tNumber;
-  Token tEntity; 
+  Token tEntity;
+  Token tShape;
 }{
  tKey =  < IDENTIFIER > { data.setName(tKey.image); } ":" "{"
-  "size" ":" tNumber = < NUMBER > ";" { data.setSize(Integer.parseInt(tNumber.image)); }
+  "size" ":" tNumber = < NUMBER > ";"
+  {
+    data.setSize(Integer.parseInt(tNumber.image));
+    data.setShapeFromString("circle");
+  }
   "entities" ":" tEntity = < IDENTIFIER > { data.addEligibleEntity(tEntity.image);  }
   ("," tEntity = < IDENTIFIER >{ data.addEligibleEntity(tEntity.image);  })* ";"
+  ("view_shape" ":" tShape = <IDENTIFIER> ";" { data.setShapeFromString(tShape.image); } )*
   "}"
  {
    return data;
@@ -92,7 +98,7 @@ java.util.Map.Entry<String,String> Attribute() :
   Token tKey;
   Token tValue; 
 }{
-  tKey =< IDENTIFIER > ":" tValue=< VALUE > ";"
+  tKey =<IDENTIFIER > ":" tValue=< VALUE > ";"
   {
     return new java.util.AbstractMap.SimpleEntry<String,String >(tKey.image,tValue.image);   }}
 
@@ -118,7 +124,15 @@ BehaviourOptions Behaviour() :
 
 
 BehaviourOperation BehaviourOperation() :{    }{
- "closest"
+"flank"
+{
+	return BehaviourOperation.Flank; 
+}
+| "field"  
+{
+	return BehaviourOperation.Field; 
+}
+| "closest"
 {
    return BehaviourOperation.Closest;
 }

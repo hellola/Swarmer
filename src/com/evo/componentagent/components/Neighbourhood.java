@@ -31,6 +31,8 @@ public class Neighbourhood extends Component {
 		return locales;
 	}
 	
+	
+	
 	public HashMap<Entity,Position> getLocaleMembers(String localeName) { 
 		return localeLists.get(localeName); 
 	}

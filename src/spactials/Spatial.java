@@ -10,6 +10,7 @@ public abstract class Spatial {
 	protected Entity owner;
 	
 	public static final Double DefaultSize = (double)10; 
+	public static final String DefaultForm = "Agent"; 
 
 	public Spatial(World world, Entity owner) {
 		this.world = world;

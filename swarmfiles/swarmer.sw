@@ -16,6 +16,21 @@ views  {
      size: 200; 
      entities: flee; 
    }
+   ObstacleAvoid: { 
+   	size:200; 
+   	entities: obstacle; 
+   	view_shape: rectangle; 
+   }
+}
+
+entity obstacle { 
+	attributes { 
+		mass: "200";
+		count: "3"; 
+		color: "#B01139"; 
+		shape: "Blob"; 
+		entity_size: "20";
+	}
 }
 
 entity flee { 
@@ -23,10 +38,11 @@ entity flee {
 		mass: "300"; 
 		max_velocity: "1"; 
 		max_force: "2"; 
-		count:"2"; 
+		count:"4"; 
 		color: "#8EB732"; 
 	}
 	behaviours { 
+	  avoid: -3; 
 	  wanderbase: 0.6;
 	  repulse: -0.8; 
 	  cohesionFlee: 0.8; 
@@ -40,15 +56,21 @@ entity agent {
 		mass: "300"; 
 		max_velocity: "1"; 
 		max_force: "2"; 
-		count:"2"; 
+		count:"4"; 
 		color: "#FE9C15";
 	}
 	behaviours { 
+		avoid: -3;
 		wanderbase: 0.6;
 		cohesionAgent: 0.4; 
 		seperationAgent: -0.7; 
 		alignmentAgent: 0.7; 
 	}
+}
+
+behaviour avoid { 
+	view: ObstacleAvoid; 
+	operation: closest; 
 }
 
 behaviour seperationAgent { 

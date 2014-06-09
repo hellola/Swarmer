@@ -107,6 +107,13 @@ public class Agent extends Spatial {
 					+ " " + id + " " + localeText);
 			g.setColor(Color.red);
 			Debug debug = debugMapper.get(owner);
+
+			g.setColor(Color.pink);
+			for (Shape shape : debug.neighbourhoodShapes) { 
+				g.draw(shape);
+			}
+			debug.neighbourhoodShapes.clear();
+
 			if (debug.drawDebugVector) {
 				g.drawLine(position.getX(), position.getY(), position.getX()
 						+ debug.debugVector.x, position.getY()
