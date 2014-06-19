@@ -50,20 +50,4 @@ Features
 * Debug mode can be toggled. 
 
 
-Required Artifacts
-------------------
-
-For one iteration: 
-
-Short design brief 
-
-Ideal feature list
-
-Cost- benefit on features -> shortlist 
-
-Architecture (UML etc.. ) 
-
-Code 
-
-Post mortem (neighbourhood) 
 
