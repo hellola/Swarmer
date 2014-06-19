@@ -16,46 +16,46 @@ import com.evo.componentagent.components.SpatialForm;
 
 public class RenderSystem extends EntityProcessingSystem {
 
-	private GameContainer container ; 
-	private Graphics graphics; 
-	private Spatial spatial; 
-	private Bag<Spatial> spatials; 
-	private ComponentMapper<Position> positionMapper; 
-	private ComponentMapper<SpatialForm> spatialFormMapper; 
+  private GameContainer container ; 
+  private Graphics graphics; 
+  private Spatial spatial; 
+  private Bag<Spatial> spatials; 
+  private ComponentMapper<Position> positionMapper; 
+  private ComponentMapper<SpatialForm> spatialFormMapper; 
 
-	public RenderSystem(GameContainer container) {
-		super(Aspect.getAspectForAll(Position.class,SpatialForm.class));
-		this.container = container; 
-		this.graphics = container.getGraphics(); 
-		spatials = new Bag<Spatial>(); 
-	}
-	
+  public RenderSystem(GameContainer container) {
+    super(Aspect.getAspectForAll(Position.class,SpatialForm.class));
+    this.container = container; 
+    this.graphics = container.getGraphics(); 
+    spatials = new Bag<Spatial>(); 
+  }
+  
 
-	@Override
-	public void initialize() {
-		positionMapper = ComponentMapper.getFor(Position.class, world); 
-		spatialFormMapper = ComponentMapper.getFor(SpatialForm.class, world); 
-		
-	}
+  @Override
+  public void initialize() {
+    positionMapper = ComponentMapper.getFor(Position.class, world); 
+    spatialFormMapper = ComponentMapper.getFor(SpatialForm.class, world); 
+    
+  }
 
-	@Override
-	protected void process(Entity entity) {
-		
-	      Spatial spatial = spatials.get(entity.getId());
-	      Position position = positionMapper.get(entity);
+  @Override
+  protected void process(Entity entity) {
+    
+        Spatial spatial = spatials.get(entity.getId());
+        Position position = positionMapper.get(entity);
 
 
-	        // within bounds?
-	        if(spatial != null && position.getX() >= 0 && position.getY() >= 0
-	           && position.getX() < container.getWidth() && position.getY() < container.getHeight()
-	           ){
-	              spatial.render(graphics);
-	        }
-		
-	}
-	
+          // within bounds?
+          if(spatial != null && position.getX() >= 0 && position.getY() >= 0
+             && position.getX() < container.getWidth() && position.getY() < container.getHeight()
+             ){
+                spatial.render(graphics);
+          }
+    
+  }
+  
     @Override
-	protected void inserted(Entity entity){
+  protected void inserted(Entity entity){
         Spatial spatial = createSpatial(entity);
         if(spatial != null){
             spatial.initalize();
@@ -89,7 +89,7 @@ public class RenderSystem extends EntityProcessingSystem {
             return new Agent(spatialForm.getName(), world, entity, spatialForm.getColor());
         }
         if ("Blob".equalsIgnoreCase(spatialFormFile)) { 
-        	return new Blob(spatialForm.getName(), world, entity,spatialForm.getColor(),spatialForm.getSize()); 
+          return new Blob(spatialForm.getName(), world, entity,spatialForm.getColor(),spatialForm.getSize()); 
         }
         // create other spatials down here
         return null;

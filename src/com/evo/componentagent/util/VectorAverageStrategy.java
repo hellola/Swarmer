@@ -15,25 +15,25 @@ import com.evo.componentagent.components.Velocity;
 
 public class VectorAverageStrategy extends AverageStrategy {
 
-	private ComponentMapper<Velocity> velocityMapper;
+  private ComponentMapper<Velocity> velocityMapper;
 
-	public VectorAverageStrategy(HashMap<Entity,Position> collection, World world) {
-		super(collection);
-		if (collection.size() > 0) {
-			velocityMapper = ComponentMapper.getFor(Velocity.class, world);
-		}
-	}
+  public VectorAverageStrategy(HashMap<Entity,Position> collection, World world) {
+    super(collection);
+    if (collection.size() > 0) {
+      velocityMapper = ComponentMapper.getFor(Velocity.class, world);
+    }
+  }
 
-	@Override
-	public Vector2f CalculateAverage() {
-		if (collection != null && collection.size() > 1) {
-			for (Entity entity : collection.keySet()) {
-				Velocity velocity = velocityMapper.get(entity);
-				add(velocity.getValue());
-			}
-			return new Vector2f(sum.x / count, sum.y / count);
-		}
-		return null;
-	}
+  @Override
+  public Vector2f CalculateAverage() {
+    if (collection != null && collection.size() > 1) {
+      for (Entity entity : collection.keySet()) {
+        Velocity velocity = velocityMapper.get(entity);
+        add(velocity.getValue());
+      }
+      return new Vector2f(sum.x / count, sum.y / count);
+    }
+    return null;
+  }
 
 }

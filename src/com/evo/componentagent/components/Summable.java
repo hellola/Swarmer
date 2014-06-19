@@ -4,5 +4,5 @@ import org.newdawn.slick.geom.Vector2f;
 
 
 public interface Summable {
-	public Vector2f getValue(); 
+  public Vector2f getValue(); 
 }

@@ -17,6 +17,7 @@ import com.evo.componentagent.components.Position;
 import com.evo.componentagent.components.SpatialForm;
 import com.evo.componentagent.components.Velocity;
 import com.evo.componentagent.systems.*;
+import com.evo.componentagent.util.Direction;
 import com.evo.componentagent.util.SwarmerApplication;
 import com.evo.componentagent.util.SwarmerEntity;
 
@@ -29,6 +30,7 @@ public class ComponentAgentGame extends BasicGame {
 	private EntitySystem movementSystem;
 	private EntitySystem wrapSystem;
 	private EntitySystem neighbourhoodSystem;
+	private EntitySystem cameraSystem;
 	private int agentCount;
 	private int currentDebugIndex;
 	private static final int DefaultNumberEntities = 10;
@@ -118,6 +120,22 @@ public class ComponentAgentGame extends BasicGame {
 		if (c == '-') {
 			timeController += 0.5;
 		}
+		if (key == Input.KEY_UP) {
+			((CameraSystem) cameraSystem).setChange(true);
+			((CameraSystem) cameraSystem).setDirection(Direction.Up);
+		}
+		if (key == Input.KEY_LEFT) {
+			((CameraSystem) cameraSystem).setChange(true);
+			((CameraSystem) cameraSystem).setDirection(Direction.Left);
+		}
+		if (key == Input.KEY_RIGHT) {
+			((CameraSystem) cameraSystem).setChange(true);
+			((CameraSystem) cameraSystem).setDirection(Direction.Right);
+		}
+		if (key == Input.KEY_DOWN) {
+			((CameraSystem) cameraSystem).setChange(true);
+			((CameraSystem) cameraSystem).setDirection(Direction.Down);
+		}
 	}
 
 	@Override
@@ -132,6 +150,7 @@ public class ComponentAgentGame extends BasicGame {
 				.setSystem(new NeighbourhoodSystem(container));
 		behaviourSystem = world.setSystem(new BehaviourSystem(container));
 		movementSystem = world.setSystem(new MovementSystem(container));
+		cameraSystem = world.setSystem(new CameraSystem(container));
 
 		world.setManager(new GroupManager());
 
@@ -256,6 +275,7 @@ public class ComponentAgentGame extends BasicGame {
 			wrapSystem.process();
 			neighbourhoodSystem.process();
 			behaviourSystem.process();
+			cameraSystem.process();
 			movementSystem.process();
 			world.process();
 		}

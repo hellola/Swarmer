@@ -126,11 +126,11 @@ BehaviourOptions Behaviour() :
 BehaviourOperation BehaviourOperation() :{    }{
 "flank"
 {
-	return BehaviourOperation.Flank; 
+  return BehaviourOperation.Flank; 
 }
 | "field"  
 {
-	return BehaviourOperation.Field; 
+  return BehaviourOperation.Field; 
 }
 | "closest"
 {
@@ -158,4 +158,4 @@ BehaviourAttribute BehaviourAttribute() :{ }
 | <  NUMBER : (("-")?["0"-"9"])+ >
 | <  IDENTIFIER : ["a"-"z","A"-"Z"](["a"-"z","A"-"Z","0"-"9","_"])* >
 | < VALUE : ("\""(~["\""])*"\"") >
-}
+}

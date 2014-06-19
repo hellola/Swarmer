@@ -334,11 +334,11 @@ public class SwarmerParser implements SwarmerParserConstants {
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case 20:
       jj_consume_token(20);
-        {if (true) return BehaviourOperation.Flank;}
+  {if (true) return BehaviourOperation.Flank;}
       break;
     case 21:
       jj_consume_token(21);
-        {if (true) return BehaviourOperation.Field;}
+  {if (true) return BehaviourOperation.Field;}
       break;
     case 22:
       jj_consume_token(22);

@@ -6,19 +6,19 @@ import com.artemis.Entity;
 import com.artemis.World;
 
 public abstract class Spatial {
-	protected World world;
-	protected Entity owner;
-	
-	public static final Double DefaultSize = (double)10; 
-	public static final String DefaultForm = "Agent"; 
+  protected World world;
+  protected Entity owner;
+  
+  public static final Double DefaultSize = (double)10; 
+  public static final String DefaultForm = "Agent"; 
 
-	public Spatial(World world, Entity owner) {
-		this.world = world;
-		this.owner = owner;
-	}
+  public Spatial(World world, Entity owner) {
+    this.world = world;
+    this.owner = owner;
+  }
 
-	public abstract void initalize();
+  public abstract void initalize();
 
-	public abstract void render(Graphics g);
+  public abstract void render(Graphics g);
 
 }
