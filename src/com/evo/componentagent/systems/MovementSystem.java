@@ -45,10 +45,10 @@ public class MovementSystem extends EntityProcessingSystem {
   private float constrain(float pos, int boundary) { 
     
     while (pos > boundary) { 
-      pos = 0;
+      pos = pos - boundary;
     }
     if (pos < 0) { 
-      pos = boundary; 
+      pos = boundary + pos; 
     }
     return pos; 
   }
