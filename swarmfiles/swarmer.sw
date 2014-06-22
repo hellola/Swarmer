@@ -5,7 +5,7 @@ views  {
    	entities: agent; 
    }
    Small: { 
-    size: 100; 
+    size: 140; 
     entities: agent,flee; 
    }
    RepulseView: { 
@@ -17,7 +17,7 @@ views  {
      entities: flee; 
    }
    ObstacleAvoid: { 
-   	size:200; 
+   	size:300; 
    	entities: obstacle; 
    	view_shape: rectangle; 
    }
@@ -26,7 +26,7 @@ views  {
 entity obstacle { 
 	attributes { 
 		mass: "200";
-		count: "3"; 
+		count: "10"; 
 		color: "#B01139"; 
 		shape: "Blob"; 
 		entity_size: "20";
@@ -38,16 +38,16 @@ entity flee {
 		mass: "300"; 
 		max_velocity: "1"; 
 		max_force: "2"; 
-		count:"4"; 
+		count:"10"; 
 		color: "#8EB732"; 
 	}
 	behaviours { 
 	  avoid: -3; 
 	  wanderbase: 0.6;
 	  repulse: -0.8; 
-	  cohesionFlee: 0.8; 
-	  seperationFlee: -1; 
-	  alignmentFlee: 0.7;
+	  cohesion: 0.6; 
+	  alignment: 0.7;
+	  seperation: -1; 
 	}
 }
 
@@ -62,9 +62,9 @@ entity agent {
 	behaviours { 
 		avoid: -3;
 		wanderbase: 0.6;
-		cohesionAgent: 0.4; 
-		seperationAgent: -0.7; 
-		alignmentAgent: 0.7; 
+		cohesion: 0.4; 
+		seperation: -0.7; 
+		alignment: 0.7; 
 	}
 }
 
@@ -73,15 +73,11 @@ behaviour avoid {
 	operation: closest; 
 }
 
-behaviour seperationAgent { 
+behaviour seperation { 
 	view: Small; 
 	operation: closest; 
 }
 
-behaviour seperationFlee { 
-	view: Small;
-	operation: closest; 
-}
 
 behaviour wanderbase { 
 	view: GeneralAgent; 
@@ -98,27 +94,16 @@ behaviour repulse {
 	operation: closest; 
 }
 
-behaviour cohesionAgent { 
-	view: GeneralAgent; 
-	operation: average; 
-	attribute: position; 
-}
-
-behaviour cohesionFlee { 
+behaviour cohesion { 
 	view: GeneralFlee; 
 	operation: average; 
 	attribute: position; 
 }
 
-behaviour alignmentFlee { 
+behaviour alignment { 
 	view: GeneralFlee; 
 	operation: average; 
 	attribute: vector; 
 }
 
-behaviour alignmentAgent { 
-	view: GeneralAgent; 
-	operation: average; 
-	attribute: vector; 
-}
 

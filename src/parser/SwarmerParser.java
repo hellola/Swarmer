@@ -15,7 +15,7 @@ public class SwarmerParser implements SwarmerParserConstants {
   {
       try
       {
-        new SwarmerParser(new FileInputStream(args[0])).CompilationUnit();
+        SwarmerApplication application = new SwarmerParser(new FileInputStream(args[0])).CompilationUnit();
         System.out.println("SUCCESS");
       }
       catch (ParseException e)
@@ -28,12 +28,15 @@ public class SwarmerParser implements SwarmerParserConstants {
       }
   }
 
-  final public void CompilationUnit() throws ParseException {
-    Program();
+  final public SwarmerApplication CompilationUnit() throws ParseException {
+  SwarmerApplication application = null;
+    application = Program();
     jj_consume_token(0);
+    {if (true) return application;}
+    throw new Error("Missing return statement in function");
   }
 
-  final public void Program() throws ParseException {
+  final public SwarmerApplication Program() throws ParseException {
   ArrayList<NeighbourhoodData> locales = null;
   ArrayList<SwarmerEntity > entities = new ArrayList<SwarmerEntity>();
   ArrayList<BehaviourOptions > behaviours = new ArrayList<BehaviourOptions >();
@@ -81,7 +84,8 @@ public class SwarmerParser implements SwarmerParserConstants {
     application.setBehaviours(behaviours);
     application.setEntities(entities);
     application.setLocales(locales);
-    application.run();
+    {if (true) return application;}
+    throw new Error("Missing return statement in function");
   }
 
   final public java.util.ArrayList<NeighbourhoodData > Views() throws ParseException {

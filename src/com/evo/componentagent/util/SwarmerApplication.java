@@ -16,10 +16,6 @@ public class SwarmerApplication {
   public SwarmerApplication() {
     
   }
-  
-  public void run() { 
-    ComponentAgentGame.startApplication(this);
-  }
 
   public BehaviourOptions getBehaviourByName(String name) { 
     for (BehaviourOptions options : behaviours) { 

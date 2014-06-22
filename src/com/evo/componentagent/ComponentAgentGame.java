@@ -1,11 +1,15 @@
 package com.evo.componentagent;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Map.Entry;
 import java.util.Random;
 
 import org.newdawn.slick.*;
 
+import parser.ParseException;
+import parser.SwarmerParser;
 import spactials.Spatial;
 
 import com.artemis.*;
@@ -38,8 +42,10 @@ public class ComponentAgentGame extends BasicGame {
 	private Random random;
 	private float timeController;
 	private Boolean debug;
+	private ArrayList<String> swarmerFiles;
+	private int currentSwarmerApplicationId; 
 
-	public ComponentAgentGame() {
+	public ComponentAgentGame(String[] args) {
 		super("Agents");
 		agentCount = 3;
 		timeController = 10;
@@ -47,19 +53,18 @@ public class ComponentAgentGame extends BasicGame {
 		currentDebugIndex = 0;
 		application = null;
 		random = new Random();
+		currentSwarmerApplicationId = 0; 
+		swarmerFiles = new ArrayList<String>(); 
+		for (int i = 0; i < args.length ;i ++ ) { 
+			swarmerFiles.add(args[i]); 
+		}
 	}
 
-	public ComponentAgentGame(SwarmerApplication application) {
-		this();
-		this.application = application;
-	}
 
 	public static void main(String[] args) {
-
 		try {
 			AppGameContainer container = new AppGameContainer(
-					new ComponentAgentGame());
-			container.setTargetFrameRate(100);
+					new ComponentAgentGame(args));
 			container.setDisplayMode(800, 600, false);
 			container.setAlwaysRender(true);
 			container.start();
@@ -68,21 +73,12 @@ public class ComponentAgentGame extends BasicGame {
 		}
 	}
 
-	public static void startApplication(SwarmerApplication application) {
-		try {
-			AppGameContainer container = new AppGameContainer(
-					new ComponentAgentGame(application));
-			container.setDisplayMode(800, 600, false);
-			container.setAlwaysRender(true);
-			container.start();
-		} catch (SlickException e) {
-			e.printStackTrace();
-		}
-	}
 
 	@Override
 	public void render(GameContainer container, Graphics graphics)
 			throws SlickException {
+		String currentFile = swarmerFiles.get(currentSwarmerApplicationId); 
+		graphics.drawString(currentFile, container.getWidth() - container.getDefaultFont().getWidth(currentFile), 10);
 		graphics.setBackground(Color.black);
 		renderSystem.process();
 	}
@@ -120,6 +116,13 @@ public class ComponentAgentGame extends BasicGame {
 		if (c == '-') {
 			timeController += 0.5;
 		}
+		if (c == 'N'){ 
+			nextSwarmerApplication();
+			loadAndRunCurrentSwarmerApplication();
+		}
+		if (c == 'R'){ 
+			loadAndRunCurrentSwarmerApplication();
+		}
 		if (key == Input.KEY_UP) {
 			((CameraSystem) cameraSystem).setChange(true);
 			((CameraSystem) cameraSystem).setDirection(Direction.Up);
@@ -137,11 +140,38 @@ public class ComponentAgentGame extends BasicGame {
 			((CameraSystem) cameraSystem).setDirection(Direction.Down);
 		}
 	}
+	
+	private void nextSwarmerApplication() { 
+		currentSwarmerApplicationId= ++currentSwarmerApplicationId % swarmerFiles.size(); 
+	}
 
 	@Override
 	public void init(GameContainer container) throws SlickException {
 
 		this.container = container;
+		loadAndRunCurrentSwarmerApplication();
+	}
+	
+	private void loadAndRunCurrentSwarmerApplication() { 
+		initialiseEntitySystem(); 
+		loadCurrentSwarmerApplication(); 
+		setUpFromSwarmerApplication();
+	}
+	private void loadCurrentSwarmerApplication() { 
+		String swarmerFile = swarmerFiles.get(currentSwarmerApplicationId); 
+		try {
+			SwarmerParser parser = new SwarmerParser(new FileInputStream(swarmerFile));
+			this.application = parser.CompilationUnit(); 
+		} catch (FileNotFoundException e) {
+			nextSwarmerApplication(); 
+			e.printStackTrace();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		} 
+
+	}
+	
+	private void initialiseEntitySystem() { 
 		world = new World();
 
 		renderSystem = world.setSystem(new RenderSystem(container));
@@ -155,12 +185,6 @@ public class ComponentAgentGame extends BasicGame {
 		world.setManager(new GroupManager());
 
 		world.initialize();
-
-		if (application == null) {
-			addAgents();
-		} else {
-			setUpFromSwarmerApplication();
-		}
 	}
 
 	private void setUpFromSwarmerApplication() {
@@ -261,10 +285,6 @@ public class ComponentAgentGame extends BasicGame {
 
 		}
 
-	}
-
-	private void addAgents() {
-		BlobFactory.createSimulation(world);
 	}
 
 	@Override

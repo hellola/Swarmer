@@ -13,17 +13,20 @@ import com.evo.componentagent.util.NeighbourhoodData;
 import com.evo.componentagent.components.*; 
 public class SwarmerParser{  public static void main(String args[])   {
       try      {
-        new SwarmerParser(new FileInputStream(args[0])).CompilationUnit();
+        SwarmerApplication application = new SwarmerParser(new FileInputStream(args[0])).CompilationUnit();
+        application.run(); 
         System.out.println("SUCCESS");       }      catch (ParseException e)      {        System.out.println("Exception:" + e.getMessage());      }      catch (FileNotFoundException e)      {        System.out.println(e.getMessage());
       }  }}PARSER_END(SwarmerParser)
 
 
-void CompilationUnit() :
-{ }
+SwarmerApplication CompilationUnit() :
+{ SwarmerApplication application = null;  }
 {
-  Program() < EOF >}
+  application = Program() < EOF >
+  {    return application;
+  }}
 
-void Program() :
+SwarmerApplication Program() :
 {
   ArrayList<NeighbourhoodData> locales = null;
   ArrayList<SwarmerEntity > entities = new ArrayList<SwarmerEntity>();
@@ -40,7 +43,7 @@ void Program() :
     application.setBehaviours(behaviours);
     application.setEntities(entities);
     application.setLocales(locales);
-    application.run(); 
+    return application; 
   }}
 
 java.util.ArrayList<NeighbourhoodData > Views() :
