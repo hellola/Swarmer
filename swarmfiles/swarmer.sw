@@ -17,16 +17,16 @@ views  {
      entities: flee; 
    }
    ObstacleAvoid: { 
-   	size:300; 
+   	size:100; 
    	entities: obstacle; 
-   	view_shape: rectangle; 
+   	shape: rectangle; 
    }
 }
 
 entity obstacle { 
 	attributes { 
 		mass: "200";
-		count: "10"; 
+		count: "5"; 
 		color: "#B01139"; 
 		shape: "Blob"; 
 		entity_size: "20";
@@ -44,7 +44,6 @@ entity flee {
 	behaviours { 
 	  avoid: -3; 
 	  wanderbase: 0.6;
-	  repulse: -0.8; 
 	  cohesion: 0.6; 
 	  alignment: 0.7;
 	  seperation: -1; 

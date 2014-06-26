@@ -5,7 +5,7 @@ views  {
    	entities: agent; 
    }
    Small: { 
-    size: 100; 
+    size: 200; 
     entities: agent; 
    }
 }
@@ -15,7 +15,7 @@ entity agent {
 		mass: "350"; 
 		max_velocity: "1"; 
 		max_force: "2"; 
-		count:"20"; 
+		count:"30"; 
 		color: "#FE9C15";
 	}
 	behaviours { 
