@@ -14,7 +14,6 @@ import com.evo.componentagent.components.*;
 public class SwarmerParser{  public static void main(String args[])   {
       try      {
         SwarmerApplication application = new SwarmerParser(new FileInputStream(args[0])).CompilationUnit();
-        application.run(); 
         System.out.println("SUCCESS");       }      catch (ParseException e)      {        System.out.println("Exception:" + e.getMessage());      }      catch (FileNotFoundException e)      {        System.out.println(e.getMessage());
       }  }}PARSER_END(SwarmerParser)
 
@@ -64,6 +63,7 @@ NeighbourhoodData View() :{
   Token tNumber;
   Token tEntity;
   Token tShape;
+  Token tWidth;
 }{
  tKey =  < IDENTIFIER > { data.setName(tKey.image); } ":" "{"
   "size" ":" tNumber = < NUMBER > ";"
@@ -73,7 +73,8 @@ NeighbourhoodData View() :{
   }
   "entities" ":" tEntity = < IDENTIFIER > { data.addEligibleEntity(tEntity.image);  }
   ("," tEntity = < IDENTIFIER >{ data.addEligibleEntity(tEntity.image);  })* ";"
-  ("view_shape" ":" tShape = <IDENTIFIER> ";" { data.setShapeFromString(tShape.image); } )*
+  ("shape" ":" tShape = <IDENTIFIER> ";" { data.setShapeFromString(tShape.image); } )*
+  ("width" ":" tWidth = < NUMBER > ";" { data.setWidth(Integer.parseInt(tWidth.image)); } )*
   "}"
  {
    return data;
@@ -112,18 +113,36 @@ BehaviourOptions Behaviour() :
   BehaviourAttribute attribute;
   Token tName; 
   Token tView;
+  Token tX;
+  Token tY;
+  Token tConditionView;
+  BehaviourCondition condition;
+  
 
 }{
   "behaviour" tName = < IDENTIFIER > { options.setName(tName.image);  } "{"
   "view" ":" tView = < IDENTIFIER > { options.setLocale(tView.image); } ";"  (
   "operation" ":" operation = BehaviourOperation() ";" { options.setOperation(operation);  }
 | "attribute" ":" attribute = BehaviourAttribute() ";" { options.setAttribute(attribute);  }
-| "panic" ":" ("true" { options.setPanic(true);  } | "false"  { options.setPanic(false); }) ";" 
+| "panic" ":" ("true" { options.setPanic(true);  } | "false"  { options.setPanic(false); }) ";"
+| "offset" ":" tX = < NUMBER > "," tY = < NUMBER > ";" { options.setOffset(Integer.parseInt(tX.image),Integer.parseInt(tY.image)); }
+| "condition" ":" "{" condition = BehaviourCondition() "," "view" ":" tConditionView =  < IDENTIFIER > "}" ";" { options.setCondition(condition, tConditionView.image);   }
   )*
   "}"
   {
     return options;   }
 }
+
+BehaviourCondition BehaviourCondition():{ }{
+  "alone"  {
+    return BehaviourCondition.Alone;   }
+| "not-alone"{
+  return BehaviourCondition.NotAlone; }
+
+{
+  return BehaviourCondition.Alone;
+}
+}
 
 
 BehaviourOperation BehaviourOperation() :{    }{
