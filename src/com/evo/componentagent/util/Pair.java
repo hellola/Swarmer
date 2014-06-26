@@ -2,7 +2,7 @@ package com.evo.componentagent.util;
 
 import org.newdawn.slick.geom.Vector2f;
 
-import com.evo.componentagent.components.*;
+import com.evo.componentagent.components.Position;
 
 public class Pair {
   private float x; 

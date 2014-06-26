@@ -6,7 +6,8 @@ import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.artemis.systems.EntityProcessingSystem;
-import com.evo.componentagent.components.*;
+import com.evo.componentagent.components.Position;
+import com.evo.componentagent.components.Velocity;
 
 
 public class MovementSystem extends EntityProcessingSystem {

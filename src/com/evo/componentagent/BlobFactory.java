@@ -2,7 +2,6 @@ package com.evo.componentagent;
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.HashMap;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.geom.Vector2f;
@@ -10,8 +9,13 @@ import org.newdawn.slick.geom.Vector2f;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.artemis.World;
-import com.artemis.managers.*;
-import com.evo.componentagent.components.*;
+import com.artemis.managers.GroupManager;
+import com.evo.componentagent.components.Behaviours;
+import com.evo.componentagent.components.Debug;
+import com.evo.componentagent.components.Neighbourhood;
+import com.evo.componentagent.components.Position;
+import com.evo.componentagent.components.SpatialForm;
+import com.evo.componentagent.components.Velocity;
 import com.evo.componentagent.util.NeighbourhoodData;
 
 public class BlobFactory {
@@ -60,8 +64,6 @@ public class BlobFactory {
     if (debug) { 
       agent.addComponent(new Debug()); 
     }
-    //int mass = 350;
-    //agent.addComponent(Velocity.RandomVelocity(mass,1,2,Velocity.DefaultPanicVelocity));
 
     GroupManager manager = world.getManager(GroupManager.class);
     manager.add(agent, group);
@@ -113,31 +115,5 @@ public class BlobFactory {
     return agent;
   }
   
-  
-/*    ArrayList<NeighbourhoodData> neighbourhoodLocales = new ArrayList<NeighbourhoodData>();
-    NeighbourhoodData locale = new NeighbourhoodData(); 
-    locale.setName("View");
-    locale.setSize(200);
-    locale.addEligibleEntity("Agent"); 
-    neighbourhoodLocales.add(locale); 
-    locale = new NeighbourhoodData(); 
-    locale.setName("Collision");
-    locale.setSize(100);
-    locale.addEligibleEntity("Agent"); 
-    neighbourhoodLocales.add(locale); 
-    agent.addComponent(new Neighbourhood(neighbourhoodLocales));
-    Behaviours behaviours = new Behaviours(); 
-    BehaviourOptions wander = BehaviourOptions.CreateBehaviourOptions(BehaviourOperation.Wander, 0.5);
-    wander.setAngle(30);
-    BehaviourOptions seperation = BehaviourOptions.BaseBehaviourOptions(BehaviourOperation.Closest, "Collision", -0.7, group);
-    BehaviourOptions cohesion = BehaviourOptions.PositionBehaviourOptions(BehaviourOperation.AverageFor, "View", 0.3, group);
-    BehaviourOptions alignment = BehaviourOptions.VectorBehaviourOptions(BehaviourOperation.AverageFor, "View", 1, group);
-
-    behaviours.AddBehaviourOption(wander);
-    behaviours.AddBehaviourOption(seperation);
-    behaviours.AddBehaviourOption(cohesion);
-    behaviours.AddBehaviourOption(alignment);
-    
-    agent.addComponent(behaviours); */
 
 }

@@ -2,9 +2,9 @@ package com.evo.componentagent.util;
 
 import java.util.ArrayList;
 
-import org.newdawn.slick.geom.Shape;
-import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Circle;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
 
 public class NeighbourhoodData {
@@ -14,10 +14,20 @@ public class NeighbourhoodData {
   private ArrayList<String> eligibleEntities;
   private Shape shape; 
   private Vector2f transformPosition; 
+  private int width; 
   
-  public NeighbourhoodData() { 
-    eligibleEntities = new ArrayList<String>(); 
+  public int getWidth() {
+	return width;
+}
 
+
+public void setWidth(int width) {
+	this.width = width;
+}
+
+
+public NeighbourhoodData() { 
+    eligibleEntities = new ArrayList<String>(); 
   }
   
   
@@ -27,8 +37,8 @@ public class NeighbourhoodData {
   
   public void setShapeFromString(String shapeName) { 
     if (shapeName.equals("rectangle")) { 
-      shape = new Rectangle(0,0,60,size); 
-      transformPosition = new Vector2f(-30,0); 
+      shape = new Rectangle(0,0,width,size); 
+      transformPosition = new Vector2f(-(width/2),0); 
     }
     else { 
       transformPosition = new Vector2f(0,0); 
@@ -53,6 +63,7 @@ public class NeighbourhoodData {
   }
   public void setSize(Integer size) {
     this.size = size;
+    this.width = size; 
   }
   public String getName() {
     return name;

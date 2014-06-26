@@ -2,10 +2,8 @@ package com.evo.componentagent.components;
 
 import java.util.ArrayList;
 
-import com.artemis.*;
-import com.evo.componentagent.*;
-
-import org.newdawn.slick.*;
+import com.artemis.Component;
+import com.evo.componentagent.BehaviourOptions;
 
 public class Behaviours extends Component {
   protected ArrayList<BehaviourOptions> behaviourOptions; 

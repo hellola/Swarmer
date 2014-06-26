@@ -11,13 +11,13 @@ public interface SwarmerParserConstants {
   /** End of File. */
   int EOF = 0;
   /** RegularExpression Id. */
-  int DECIMAL = 33;
+  int DECIMAL = 38;
   /** RegularExpression Id. */
-  int NUMBER = 34;
+  int NUMBER = 39;
   /** RegularExpression Id. */
-  int IDENTIFIER = 35;
+  int IDENTIFIER = 40;
   /** RegularExpression Id. */
-  int VALUE = 36;
+  int VALUE = 41;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -33,7 +33,8 @@ public interface SwarmerParserConstants {
     "\";\"",
     "\"entities\"",
     "\",\"",
-    "\"view_shape\"",
+    "\"shape\"",
+    "\"width\"",
     "\"entity\"",
     "\"attributes\"",
     "\"behaviours\"",
@@ -44,6 +45,10 @@ public interface SwarmerParserConstants {
     "\"panic\"",
     "\"true\"",
     "\"false\"",
+    "\"offset\"",
+    "\"condition\"",
+    "\"alone\"",
+    "\"not-alone\"",
     "\"flank\"",
     "\"field\"",
     "\"closest\"",
@@ -56,7 +61,7 @@ public interface SwarmerParserConstants {
     "\"\\r\"",
     "\"\\t\"",
     "\"\\n\"",
-    "<token of kind 32>",
+    "<token of kind 37>",
     "<DECIMAL>",
     "<NUMBER>",
     "<IDENTIFIER>",

@@ -2,15 +2,18 @@ package com.evo.componentagent;
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.HashMap;
 
 import org.newdawn.slick.Color;
-import org.newdawn.slick.geom.Vector2f;
 
 import com.artemis.Entity;
 import com.artemis.World;
-import com.artemis.managers.*;
-import com.evo.componentagent.components.*;
+import com.artemis.managers.GroupManager;
+import com.evo.componentagent.components.Behaviours;
+import com.evo.componentagent.components.Debug;
+import com.evo.componentagent.components.Neighbourhood;
+import com.evo.componentagent.components.Position;
+import com.evo.componentagent.components.SpatialForm;
+import com.evo.componentagent.components.Velocity;
 import com.evo.componentagent.util.NeighbourhoodData;
 
 public class AgentFactory {

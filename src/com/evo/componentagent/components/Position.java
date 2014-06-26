@@ -12,7 +12,8 @@ public class Position extends Component implements Summable {
   private float x; 
   private float y; 
   
-  public Vector2f getValue() { 
+  @Override
+public Vector2f getValue() { 
     return new Vector2f(x,y); 
   }
   

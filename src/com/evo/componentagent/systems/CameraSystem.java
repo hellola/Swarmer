@@ -6,31 +6,30 @@ import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.artemis.systems.EntityProcessingSystem;
-import com.evo.componentagent.components.*;
+import com.evo.componentagent.components.Position;
 import com.evo.componentagent.util.Direction;
 
 
 public class CameraSystem extends EntityProcessingSystem {
 
   private ComponentMapper<Position> positionMapper;
-  private ComponentMapper<Velocity> velocityMapper;
   private GameContainer container; 
   private boolean change; 
   private boolean completed; 
 
   private int startEntityId; 
   public void setChange(boolean change) {
-	this.change = change;
+  this.change = change;
 }
 
 private Direction direction; 
 
   public Direction getDirection() {
-	return direction;
+  return direction;
 }
 
 public void setDirection(Direction direction) {
-	this.direction = direction;
+  this.direction = direction;
 }
 
 public CameraSystem(GameContainer container) {
@@ -50,35 +49,35 @@ public CameraSystem(GameContainer container) {
   protected void process(Entity entity) {
     if (entity.getId() == startEntityId) {
       // we have cycled through everything
-    	completed = true; 
+      completed = true; 
     }
 
     Position position = positionMapper.get(entity); 
     float newX = position.getX(); 
     float newY = position.getY(); 
     if (change) { 
-    	change = false; 
-    	startEntityId = entity.getId(); 
-    	completed = false; 
+      change = false; 
+      startEntityId = entity.getId(); 
+      completed = false; 
     }
     if (!completed) { 
-    	switch (direction) { 
-    	case Up: 
-    		newY -= 10 * world.delta; 
-    		break; 
-    	case Down: 
-    		newY += 10 * world.delta; 
-    		break; 
-    	case Left: 
-    		newX -= 10 * world.delta; 
-    		break;
-    	case Right: 
-    		newX += 10 * world.delta; 
-    		break;
-    	}
+      switch (direction) { 
+      case Up: 
+        newY -= 10 * world.delta; 
+        break; 
+      case Down: 
+        newY += 10 * world.delta; 
+        break; 
+      case Left: 
+        newX -= 10 * world.delta; 
+        break;
+      case Right: 
+        newX += 10 * world.delta; 
+        break;
+      }
     }
     else { 
-    	startEntityId = -1; 
+      startEntityId = -1; 
     }
     newX = constrain(newX, container.getWidth()); 
     newY = constrain(newY, container.getHeight()); 

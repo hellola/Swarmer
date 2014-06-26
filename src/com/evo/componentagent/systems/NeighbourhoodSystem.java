@@ -1,11 +1,8 @@
 package com.evo.componentagent.systems;
 
-import java.util.ArrayList;
-
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Shape;
-import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Transform;
 import org.newdawn.slick.geom.Vector2f;
 
@@ -15,7 +12,11 @@ import com.artemis.Entity;
 import com.artemis.managers.GroupManager;
 import com.artemis.systems.EntityProcessingSystem;
 import com.artemis.utils.ImmutableBag;
-import com.evo.componentagent.components.*;
+import com.evo.componentagent.components.Debug;
+import com.evo.componentagent.components.FacadePosition;
+import com.evo.componentagent.components.Neighbourhood;
+import com.evo.componentagent.components.Position;
+import com.evo.componentagent.components.Velocity;
 import com.evo.componentagent.util.NeighbourhoodData;
 
 public class NeighbourhoodSystem extends EntityProcessingSystem {
@@ -25,7 +26,6 @@ public class NeighbourhoodSystem extends EntityProcessingSystem {
   private ComponentMapper<Neighbourhood> neighbourhoodMapper;
   private ComponentMapper<Debug> debugMapper;
   private ComponentMapper<Velocity> velocityMapper;
-  private GameContainer container;
   private GroupManager groupManager;
   private Position entityPosition;
   private Neighbourhood neighbourhood;
@@ -36,7 +36,6 @@ public class NeighbourhoodSystem extends EntityProcessingSystem {
 
   public NeighbourhoodSystem(GameContainer container) {
     super(Aspect.getAspectForAll(Position.class, Neighbourhood.class));
-    this.container = container;
   }
 
   @Override

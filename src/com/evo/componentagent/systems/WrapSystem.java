@@ -1,17 +1,15 @@
 package com.evo.componentagent.systems;
 
-import java.util.ArrayList;
-
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.geom.Circle;
 
 import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
-import com.artemis.managers.GroupManager;
 import com.artemis.systems.EntityProcessingSystem;
-import com.artemis.utils.ImmutableBag;
-import com.evo.componentagent.components.*;
+import com.evo.componentagent.components.Debug;
+import com.evo.componentagent.components.FacadePosition;
+import com.evo.componentagent.components.Position;
 
 public class WrapSystem extends EntityProcessingSystem {
 

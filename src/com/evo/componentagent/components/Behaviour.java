@@ -1,9 +1,7 @@
 package com.evo.componentagent.components;
 
-import com.artemis.*;
-import com.evo.componentagent.*;
-
-import org.newdawn.slick.*;
+import com.artemis.Component;
+import com.evo.componentagent.BehaviourOptions;
 
 public class Behaviour extends Component {
   private BehaviourOptions options; 

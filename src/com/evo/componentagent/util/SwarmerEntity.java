@@ -1,10 +1,7 @@
 package com.evo.componentagent.util;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
-
-import com.evo.componentagent.BehaviourOptions;
 
 public class SwarmerEntity {
   private String name; 

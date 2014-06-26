@@ -1,6 +1,14 @@
 package com.evo.componentagent;
 
-import com.evo.componentagent.components.Behaviours;
+import org.newdawn.slick.geom.Vector2f;
+
+import com.artemis.Entity;
+import com.evo.componentagent.components.Neighbourhood;
+import com.evo.componentagent.components.Position;
+import com.evo.componentagent.util.AloneConditional;
+import com.evo.componentagent.util.Condition;
+import com.evo.componentagent.util.NotAloneConditional;
+
 
 public class BehaviourOptions {
   private BehaviourOperation operation; 
@@ -12,6 +20,9 @@ public class BehaviourOptions {
   private String group;
   private boolean panic; 
   private int entityId; 
+  private Vector2f offset; 
+  private Condition conditional; 
+  private boolean hasOffset; 
 
   public  BehaviourOptions() { 
   }
@@ -24,7 +35,10 @@ public class BehaviourOptions {
     this.group = options.getGroup(); 
     this.operation = options.getOperation(); 
     this.attribute = options.getAttribute(); 
+    this.conditional = options.getConditional(); 
     this.panic = options.isPanic(); 
+    this.offset = options.getOffset(); 
+    this.hasOffset = options.hasOffset(); 
   }
   
   public static BehaviourOptions VectorBehaviourOptions(BehaviourOperation operation, String locale, double force, String group) {
@@ -66,6 +80,22 @@ public class BehaviourOptions {
   public BehaviourOperation getOperation() {
     return operation;
   }
+
+  public void setCondition(BehaviourCondition condition, String view ) { 
+	  Condition conditional = null; 
+
+	  switch (condition) { 
+	  case Alone:  
+		  conditional = new AloneConditional(); 
+		  break; 
+	  case NotAlone:
+		  conditional = new NotAloneConditional(); 
+		  break;
+	  }
+	  conditional.setView(view); 
+	  this.setConditional(conditional);
+  }
+
   public void setOperation(BehaviourOperation operation) {
     this.operation = operation;
   }
@@ -121,5 +151,31 @@ public class BehaviourOptions {
   public void setEntityId(int entityId) {
     this.entityId = entityId;
   }
+
+
+  public Condition getConditional() {
+    return conditional;
+  }
+
+  public void setConditional(Condition conditional) {
+    this.conditional = conditional;
+  }
+
+public Vector2f getOffset() {
+	return offset;
+}
+
+public void setOffset(Vector2f offset) {
+	this.offset = offset;
+	hasOffset  = true; 
+}
+
+public boolean hasOffset() { 
+	return hasOffset; 
+}
+public void setOffset(int x, int y) {
+	hasOffset = true; 
+	this.offset = new Vector2f(x,y);
+}
 
 }

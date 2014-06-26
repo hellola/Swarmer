@@ -1,11 +1,8 @@
 package com.evo.componentagent.util;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import com.evo.componentagent.BehaviourOptions;
-import com.evo.componentagent.ComponentAgentGame;
-import com.evo.componentagent.components.Neighbourhood;
 
 public class SwarmerApplication {
   private ArrayList<BehaviourOptions> behaviours; 

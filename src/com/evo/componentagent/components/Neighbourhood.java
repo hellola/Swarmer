@@ -1,7 +1,6 @@
 package com.evo.componentagent.components;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,8 +10,6 @@ import com.evo.componentagent.util.NeighbourhoodData;
 
 public class Neighbourhood extends Component {
   
-  private int viewSize; 
-  private String name; 
   private Map<String,HashMap<Entity,Position>> localeLists; 
   private ArrayList<NeighbourhoodData> locales; 
 

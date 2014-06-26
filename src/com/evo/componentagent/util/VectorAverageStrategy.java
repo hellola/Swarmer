@@ -1,6 +1,5 @@
 package com.evo.componentagent.util;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.newdawn.slick.geom.Vector2f;
@@ -8,9 +7,7 @@ import org.newdawn.slick.geom.Vector2f;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.artemis.World;
-import com.evo.componentagent.BehaviourOptions;
 import com.evo.componentagent.components.Position;
-import com.evo.componentagent.components.Summable;
 import com.evo.componentagent.components.Velocity;
 
 public class VectorAverageStrategy extends AverageStrategy {

@@ -1,41 +1,26 @@
 package spactials;
 
-import java.awt.Container;
-import java.net.URL;
-
-import com.artemis.ComponentMapper;
-
-import org.newdawn.slick.geom.*;
-
-import com.artemis.Entity;
-import com.artemis.World;
-import com.evo.componentagent.components.Behaviours;
-import com.evo.componentagent.components.Debug;
-import com.evo.componentagent.components.Neighbourhood;
-import com.evo.componentagent.components.Position;
-import com.evo.componentagent.components.Velocity;
-import com.evo.componentagent.util.NeighbourhoodData;
-
 import org.newdawn.slick.AngelCodeFont;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Circle;
-import org.newdawn.slick.geom.Line;
-import org.newdawn.slick.geom.Polygon;
-import org.newdawn.slick.geom.Transform;
-import org.newdawn.slick.util.ResourceLoader;
+
+import com.artemis.ComponentMapper;
+import com.artemis.Entity;
+import com.artemis.World;
+import com.evo.componentagent.components.Debug;
+import com.evo.componentagent.components.Neighbourhood;
+import com.evo.componentagent.components.Position;
+import com.evo.componentagent.util.NeighbourhoodData;
 
 public class Blob extends Spatial {
 
   private Position position;
-  private Velocity velocity;
   private Circle blob;
   private ComponentMapper<Debug> debugMapper;
   private ComponentMapper<Position> positionMapper;
-  private ComponentMapper<Velocity> velocityMapper;
-  private ComponentMapper<Behaviours> behaviourMapper;
   private ComponentMapper<Neighbourhood> neighbourhoodMapper;
   private Color color;
   private String name;
@@ -66,11 +51,9 @@ public class Blob extends Spatial {
   @Override
   public void initalize() {
     positionMapper = ComponentMapper.getFor(Position.class, world);
-    velocityMapper = ComponentMapper.getFor(Velocity.class, world);
-    behaviourMapper = ComponentMapper.getFor(Behaviours.class, world);
     neighbourhoodMapper = ComponentMapper
         .getFor(Neighbourhood.class, world);
-    blob = new Circle((float) 30, (float) 30, (float) size);
+    blob = new Circle(30, 30, (float) size);
 
     size = 10;
   }
@@ -78,7 +61,6 @@ public class Blob extends Spatial {
   @Override
   public void render(Graphics g) {
     position = positionMapper.get(owner);
-    velocity = velocityMapper.get(owner);
     if (debugMapper.has(owner)) {
       g.setColor(Color.green);
     } else {

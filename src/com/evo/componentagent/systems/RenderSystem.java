@@ -1,6 +1,7 @@
 package com.evo.componentagent.systems;
 
-import org.newdawn.slick.*;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
 
 import spactials.Agent;
 import spactials.Blob;
@@ -18,7 +19,6 @@ public class RenderSystem extends EntityProcessingSystem {
 
   private GameContainer container ; 
   private Graphics graphics; 
-  private Spatial spatial; 
   private Bag<Spatial> spatials; 
   private ComponentMapper<Position> positionMapper; 
   private ComponentMapper<SpatialForm> spatialFormMapper; 

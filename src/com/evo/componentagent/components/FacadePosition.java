@@ -2,10 +2,7 @@ package com.evo.componentagent.components;
 
 import java.util.ArrayList;
 
-import com.artemis.*;
-import com.evo.componentagent.*;
-
-import org.newdawn.slick.*;
+import com.artemis.Component;
 
 public class FacadePosition extends Component {
   protected ArrayList<Position> facadePositions; 
